@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Flappy Bird</title>
+    <link rel="stylesheet" href="estilo.css">
+    <link rel="stylesheet" href="flappy.css">
+</head>
+
+<body class="conteudo">
+    <!-- <h1>Flappy Bird</h1> -->
+    <div wm-flappy>
+        <div points style="position:absolute; font-size: 2em; z-index: 10; top:10px; right: 10px;"> Pontos: 0</div>
+        <div class="obstaculo" style="margin-left:80%">
+            <div class="obstaculo-superior"></div>
+            <div class="obstaculo-inferior"></div>
+        </div>
+        <div class="box-player">
+            <div class='player' style='margin-top: 0px;height:50px;'>
+                <img src="passaro.png" style="margin:auto; width:100%;display:block ;" alt="passaro"/>
+            </div>
+        </div>
+    </div>
+    <script src="flappy.js"></script>
+</body>
+
+</html>
