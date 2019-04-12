@@ -46,17 +46,17 @@ function endFrame() {
     document.querySelector('body').innerHTML = "LOOSEEERRR"
 }
 
-let points = 0
+let points = 0, down = 1
 const inf = 1000000, jump = 6
 
 function getBarriersXBounds() {
     const barriers = document.querySelectorAll('.obstaculo')
     const aBarriers = Array.from(barriers)
     if (aBarriers.length === 0) {
-        return {
+        return [{
             l: 0,
             r: 0
-        }
+        }]
     }
     return aBarriers.map(element => {
         const elementBounds = element.getBoundingClientRect()
@@ -87,7 +87,9 @@ function upgradePositionBarriers() {
     })
 }
 
-function upgradePositionPlayer(fjump = jump / 2) {
+function upgradePositionPlayer(fjump = jump / 1.2) {
+    if(down == 0) fjump = -fjump
+    console.log(down)
     const player = document.querySelector('.player')
     let topMargin = parseInt(player.style['margin-top'])
     const height = parseInt(player.style.height)
@@ -101,9 +103,12 @@ function upgradePositionPlayer(fjump = jump / 2) {
 }
 
 function destroyPassedBarriers() {
-    const barriers = document.querySelectorAll('.obstaculo')
-    barriers.forEach((element, index) => {
-        if (element.right < 0) element.outerHTML = ""
+    const barriersBounds = getBarriersXBounds() 
+    const barriers = Array.from(document.querySelectorAll('.obstaculo'))
+    barriersBounds.forEach((element, index) => {
+        if (element.r < 0) {
+            barriers[index].parentNode.removeChild(barriers[index])
+        }
     })
 }
 
@@ -123,21 +128,39 @@ function getObstacleSizes() {
     }
 }
 
+function getObstacle(invert) {
+    let body = document.createElement("div")
+    let hhead = document.createElement("div")
+    body.setAttribute('style', 'height: 80%; width: 80%; margin-left: 10%; background-image: linear-gradient(to right, rgb(8, 204, 8), rgb(8, 50, 8));')
+    hhead.setAttribute('style', 'height: 20%; width: 100%; float: center; background-image: linear-gradient(to right, rgb(8, 204, 8), rgb(8, 50, 8));')
+    if(invert) return {0: hhead, 1: body}
+    else return {0: body, 1: hhead}
+}
+
 function createBarrier() {
 
     const gameScreenWidth = getGameScreenWidth()
     const toInsert = document.querySelector('[wm-flappy]')
     const objecticleSizes = getObstacleSizes()
     
-    let newBarrierCode = '<div class="obstaculo" style="margin-left:'
-    newBarrierCode += `${gameScreenWidth}px`
-    newBarrierCode += ';"><div class="obstaculo-superior" style="height:'
-    newBarrierCode += `${objecticleSizes.top}px`
-    newBarrierCode += ';"></div><div class="obstaculo-inferior" style="height:'
-    newBarrierCode += `${objecticleSizes.bottom}px`
-    newBarrierCode += ';"></div></div>'
-    const textToIns = document.createTextNode(newBarrierCode)
-    toInsert.innerHTML += newBarrierCode
+    let mainDiv = document.createElement("div")
+    mainDiv.setAttribute('style', `margin-left: ${gameScreenWidth}px;`)
+    mainDiv.setAttribute('class', 'obstaculo')
+    let topObstacle = document.createElement("div")
+    topObstacle.setAttribute('style', `height:${objecticleSizes.top}px;`)
+    topObstacle.setAttribute('class', `obstaculo-superior`)
+    const bodyHeadTop = getObstacle(false)
+    topObstacle.appendChild(bodyHeadTop['0'])
+    topObstacle.appendChild(bodyHeadTop['1'])  
+    let bottomObstacle = document.createElement('div')
+    bottomObstacle.setAttribute('style', `height:${objecticleSizes.bottom}px;`)
+    bottomObstacle.setAttribute('class', `obstaculo-inferior`)
+    const bodyHeadBottom = getObstacle(true)
+    bottomObstacle.appendChild(bodyHeadBottom['0'])
+    bottomObstacle.appendChild(bodyHeadBottom['1'])
+    mainDiv.appendChild(topObstacle)
+    mainDiv.appendChild(bottomObstacle)
+    toInsert.appendChild(mainDiv)
 }
 
 function addBarriers() {
@@ -176,5 +199,5 @@ renderFrame()
 
 const aux = document.querySelector('[wm-flappy]')
 aux.onclick = _ => {
-    upgradePositionPlayer(-20)
+    down ^= 1
 }

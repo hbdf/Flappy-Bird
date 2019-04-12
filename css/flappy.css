@@ -2,13 +2,12 @@
     position: relative;
     width: 100%;
     height: 100%;
-    background-color: rgb(107, 143, 241);
+    background-image: linear-gradient(to right, rgb(107, 143, 241), rgb(10, 30, 80));
     overflow: hidden;
 }
 
 .obstaculo {
     position: absolute;
-   /* margin-left: 80px; */
     display: flex;
     flex-direction: column;
     justify-content: space-between; 
@@ -16,20 +15,17 @@
     height: 100%;
 }
 .obstaculo-superior {
-    border: 1px solid black; 
     height: 30%;
     width: 100%;
-    background-color: rgb(8, 204, 8);
+    background-color: rgb(107, 143, 241, 0);
 }
 .obstaculo-inferior {
-    border: 1px solid black;
     height: 30%;
     width: 100%;
-    background-color: rgb(8, 204, 8);
+    background-color: rgb(107, 143, 241, 0);
 }
 
 .box-player {
-
     position: absolute;
     margin-left: 25%;
     display:flex;
@@ -39,10 +35,8 @@
     width: 50px;
 }
 
-.player {
-    
+.player {    
     width: 100%;
     margin-top:100px;
     background-color: none;
 }
-
